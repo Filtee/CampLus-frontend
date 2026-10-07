@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampLus 风格 · 清爽白（Notion 风 · 内容优先）</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      /* ─────────────────────────────────────────────────────────────
+         清爽白 · crisp / white / content-first / lightly tactile
+         纯白背景、中性冷灰、1px 边框、极克制阴影、单一靛蓝强调色。
+         无纸纹、无暖色、无便利贴、无大投影、无渐变。
+         ───────────────────────────────────────────────────────────── */
+      :root {
+        --r-sm: 6px; --r: 8px; --r-lg: 12px;      /* 单一圆角阶梯 */
+        --background: oklch(1 0 0);                /* 纯白 */
+        --foreground: oklch(0.21 0 0);             /* 近黑 */
+        --card: oklch(1 0 0);
+        --muted: oklch(0.968 0 0);
+        --muted-foreground: oklch(0.552 0 0);      /* 中性灰 */
+        --accent: oklch(0.968 0 0);                /* 中性 hover 底 */
+        --border: oklch(0.922 0 0);                /* 清晰 1px 边框 */
+        --primary: oklch(0.52 0.17 266);           /* 唯一强调色：靛蓝 */
+        --primary-foreground: oklch(0.985 0.004 266);
+        --sidebar: oklch(0.985 0 0);               /* 极浅中性灰侧栏 */
+        --success: oklch(0.6 0.13 158);
+        --warning: oklch(0.68 0.14 68);
+        --destructive: oklch(0.58 0.21 24);
+        --node-announcement: oklch(0.58 0.13 240);
+        --node-assignment: oklch(0.66 0.14 66);
+        --node-exam: oklch(0.58 0.2 22);
+        --node-material: oklch(0.56 0.15 288);
+        --node-milestone: oklch(0.6 0.13 160);
+        /* 极克制、低距离阴影 */
+        --shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.04);
+        --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.05), 0 1px 1px -1px oklch(0 0 0 / 0.04);
+        --shadow-pop: 0 4px 12px -2px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.06);
+      }
+      .dark {
+        --background: oklch(0.205 0 0);            /* 中性深底，非纯黑 OLED */
+        --foreground: oklch(0.985 0 0);
+        --card: oklch(0.242 0 0);                  /* 比底更亮 → 边界可见 */
+        --muted: oklch(0.28 0 0);
+        --muted-foreground: oklch(0.712 0 0);
+        --accent: oklch(0.29 0 0);
+        --border: oklch(1 0 0 / 0.13);
+        --primary: oklch(0.645 0.16 266);
+        --primary-foreground: oklch(0.17 0.02 266);
+        --sidebar: oklch(0.178 0 0);
+        --success: oklch(0.7 0.13 158);
+        --warning: oklch(0.78 0.13 72);
+        --destructive: oklch(0.7 0.19 22);
+        --node-announcement: oklch(0.72 0.13 240);
+        --node-assignment: oklch(0.76 0.13 70);
+        --node-exam: oklch(0.7 0.18 22);
+        --node-material: oklch(0.7 0.15 288);
+        --node-milestone: oklch(0.72 0.13 160);
+        --shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.25);
+        --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.3);
+        --shadow-pop: 0 4px 12px -2px oklch(0 0 0 / 0.5), 0 2px 4px -2px oklch(0 0 0 / 0.4);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; background: var(--background); color: var(--foreground);
+        font-family: 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+        line-height: 1.6; -webkit-font-smoothing: antialiased;
+      }
+      .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      h1,h2,h3,h4 { margin: 0; font-weight: 600; } /* 中文不加字距 */
+      .muted { color: var(--muted-foreground); }
+      a { color: inherit; text-decoration: none; }
+      :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: var(--r-sm); }
+
+      /* ── shell ── */
+      .app { display: grid; grid-template-columns: 232px 1fr; min-height: 100vh; }
+      .sidebar { background: var(--sidebar); border-right: 1px solid var(--border); position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 16px; padding: 16px 18px; }
+      .brand .mark { width: 26px; height: 26px; border-radius: 7px; background: var(--primary); color: var(--primary-foreground); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+      .nav { padding: 6px 10px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+      .nav a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: var(--r); font-size: 14px; color: var(--muted-foreground); font-weight: 500; cursor: pointer; transition: background 150ms, color 150ms; }
+      .nav a:hover { background: var(--accent); color: var(--foreground); }
+      .nav a.on { background: color-mix(in oklch, var(--primary) 9%, transparent); color: var(--foreground); }
+      .nav a.on .ic { background: var(--primary); opacity: 1; }
+      .nav .ic { width: 15px; height: 15px; border-radius: 4px; background: currentColor; opacity: 0.45; flex: none; }
+      .foot { padding: 12px 18px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted-foreground); }
+
+      .topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 24px; border-bottom: 1px solid var(--border); background: var(--background); }
+      .tsearch { display: flex; align-items: center; gap: 8px; height: 34px; flex: 1; max-width: 360px; padding: 0 11px; border: 1px solid var(--border); border-radius: var(--r); background: var(--background); color: var(--muted-foreground); font-size: 13px; cursor: text; transition: border-color 150ms, box-shadow 150ms; }
+      .tsearch:hover { border-color: color-mix(in oklch, var(--foreground) 20%, var(--border)); }
+      .toggle { cursor: pointer; border: 1px solid var(--border); background: var(--background); color: var(--foreground); border-radius: var(--r); padding: 6px 11px; font-size: 12px; font-family: inherit; transition: background 150ms; }
+      .toggle:hover { background: var(--accent); }
+      .avatar { width: 30px; height: 30px; border-radius: 999px; background: color-mix(in oklch, var(--primary) 12%, transparent); color: var(--primary); display: grid; place-items: center; font-size: 11px; font-weight: 600; }
+
+      .content { padding: 28px 28px 72px; max-width: 1040px; margin: 0 auto; }
+      .notice { font-size: 12.5px; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: var(--r); padding: 9px 13px; margin-bottom: 22px; background: var(--muted); }
+
+      /* ── buttons / controls ── */
+      .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 13px; border-radius: var(--r); font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; border: 1px solid transparent; transition: background 150ms, border-color 150ms, transform 120ms; }
+      .btn:active { transform: translateY(0.5px); } /* 轻按下 */
+      .btn.primary { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-xs); }
+      .btn.primary:hover { background: color-mix(in oklch, var(--primary) 90%, black); }
+      .btn.outline { background: var(--background); border-color: var(--border); color: var(--foreground); }
+      .btn.outline:hover { background: var(--accent); }
+      .btn.ghost { background: transparent; color: var(--muted-foreground); }
+      .btn.ghost:hover { background: var(--accent); color: var(--foreground); }
+      .btn.sm { height: 30px; font-size: 12.5px; padding: 0 11px; }
+
+      /* badges & pills — 徽章用小圆角；pill 仅状态 / 筛选 / 可移除筛选项 */
+      .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--r-sm); border: 1px solid var(--border); color: var(--muted-foreground); background: var(--background); }
+      .badge.code { font-family: 'JetBrains Mono', monospace; color: var(--primary); background: color-mix(in oklch, var(--primary) 9%, transparent); border-color: transparent; }
+      .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 2px 9px; border-radius: 999px; }
+      .pill.ok { background: color-mix(in oklch, var(--success) 12%, transparent); color: var(--success); }
+      .pill.soon { background: color-mix(in oklch, var(--warning) 16%, transparent); color: color-mix(in oklch, var(--warning) 72%, var(--foreground)); }
+      .pill.over { background: color-mix(in oklch, var(--destructive) 12%, transparent); color: var(--destructive); }
+      .pill.mut { background: var(--muted); color: var(--muted-foreground); }
+      .fchip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; padding: 4px 6px 4px 11px; border-radius: 999px; background: color-mix(in oklch, var(--primary) 9%, transparent); color: color-mix(in oklch, var(--primary) 80%, var(--foreground)); }
+      .fchip button { border: 0; background: transparent; color: inherit; cursor: pointer; font-size: 14px; line-height: 1; padding: 0 2px; opacity: 0.7; border-radius: 999px; }
+      .fchip button:hover { opacity: 1; }
+      .dot { width: 8px; height: 8px; border-radius: 999px; flex: none; display: inline-block; }
+
+      /* card — 克制：白底、1px 边、极小阴影、hover 变边 */
+      .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow-xs); }
+
+      .page-h { margin-bottom: 18px; }
+      .page-h h1 { font-size: 22px; }
+      .page-h .sub { color: var(--muted-foreground); font-size: 14px; margin-top: 3px; }
+
+      /* toolbar + filters */
+      .toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+      .fieldsearch { display: flex; align-items: center; gap: 8px; height: 36px; flex: 1; min-width: 220px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--r); background: var(--background); color: var(--muted-foreground); font-size: 14px; transition: border-color 150ms, box-shadow 150ms; }
+      .fieldsearch:focus-within, .fieldsearch:hover { border-color: color-mix(in oklch, var(--primary) 45%, var(--border)); }
+      .fchips { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+      .fchips .lbl { font-size: 12.5px; color: var(--muted-foreground); }
+
+      .countline { font-size: 13px; color: var(--muted-foreground); margin-bottom: 12px; }
+
+      /* course catalog cards */
+      .catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr)); gap: 14px; }
+      .ccard { display: flex; flex-direction: column; gap: 10px; padding: 16px; cursor: pointer; transition: border-color 150ms, background 150ms; }
+      .ccard:hover { border-color: color-mix(in oklch, var(--primary) 40%, var(--border)); background: color-mix(in oklch, var(--accent) 50%, var(--card)); }
+      .ccard h3 { font-size: 15px; line-height: 1.4; }
+      .ccard .meta { font-size: 12px; color: var(--muted-foreground); }
+      .ccard .desc { font-size: 13px; color: var(--muted-foreground); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+      .ccard .foot { margin-top: auto; padding-top: 11px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-size: 13px; }
+
+      /* detail: header & facts as SECTIONS (no card) */
+      .back { font-size: 13px; color: var(--muted-foreground); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 14px; }
+      .back:hover { color: var(--foreground); }
+      .detail-h .toprow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .detail-h h1 { font-size: 26px; margin: 12px 0 8px; letter-spacing: -0.01em; }
+      .detail-h .meta { font-size: 14px; color: var(--muted-foreground); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+      .detail-h .meta .sep { color: var(--border); }
+      .detail-h .desc { font-size: 14px; color: color-mix(in oklch, var(--foreground) 82%, transparent); max-width: 70ch; margin-top: 12px; line-height: 1.7; }
+      .detail-h .maint { font-size: 13px; color: var(--muted-foreground); margin-top: 10px; }
+      hr.sep { border: 0; border-top: 1px solid var(--border); margin: 22px 0; }
+
+      /* facts as a plain section — no box, just spacing (separators via surrounding hr) */
+      .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px 28px; }
+      .facts .f { padding: 0; }
+      .facts .fk { font-size: 12px; color: var(--muted-foreground); }
+      .facts .fv { font-size: 14px; font-weight: 500; margin-top: 3px; display: flex; align-items: center; gap: 7px; }
+      .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+      .legend span { font-size: 12.5px; color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 6px; }
+
+      /* segmented semester switch */
+      .seg { display: inline-flex; background: var(--muted); border-radius: var(--r); padding: 3px; }
+      .seg button { border: 0; background: transparent; font-family: inherit; font-size: 13px; color: var(--muted-foreground); padding: 5px 12px; border-radius: var(--r-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background 150ms, color 150ms; }
+      .seg button.on { background: var(--card); color: var(--foreground); box-shadow: var(--shadow-xs); font-weight: 500; }
+
+      /* alert (allowed as bounded exceptional state) */
+      .alert { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--r); background: var(--muted); font-size: 13px; color: color-mix(in oklch, var(--foreground) 85%, transparent); }
+      .alert .ai { color: var(--muted-foreground); flex: none; margin-top: 1px; }
+
+      /* timeline */
+      .tl-sec { margin-top: 8px; }
+      .week-h { display: flex; align-items: center; gap: 10px; margin: 24px 0 12px; }
+      .week-h .mk { width: 11px; height: 11px; border-radius: 999px; flex: none; box-shadow: 0 0 0 4px var(--background); }
+      .week-h .mk.cur { background: var(--primary); }
+      .week-h .mk.past { background: color-mix(in oklch, var(--muted-foreground) 45%, transparent); }
+      .week-h h3 { font-size: 14px; }
+      .week-h .ln { height: 1px; flex: 1; background: var(--border); }
+      .tl-group { border-left: 1px solid var(--border); margin-left: 5px; padding-left: 18px; display: flex; flex-direction: column; gap: 11px; }
+      .tnode { position: relative; overflow: hidden; padding: 15px 17px 15px 18px; transition: border-color 150ms, box-shadow 150ms; }
+      .tnode:hover { border-color: color-mix(in oklch, var(--foreground) 14%, var(--border)); box-shadow: var(--shadow-sm); }
+      .tnode .rail { position: absolute; inset: 0 auto 0 0; width: 3px; }
+      .tnode .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+      .tnode .types { display: inline-flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+      .nbadge { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--r-sm); border: 1px solid color-mix(in oklch, var(--c) 35%, transparent); color: var(--c); background: color-mix(in oklch, var(--c) 9%, transparent); }
+      .tnode h4 { font-size: 15px; margin: 11px 0 5px; }
+      .tnode p { margin: 0; font-size: 13.5px; color: color-mix(in oklch, var(--foreground) 80%, transparent); line-height: 1.65; }
+      .tnode .foot { margin-top: 13px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted-foreground); }
+
+      /* empty state */
+      .empty { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 44px 20px; border: 1px dashed var(--border); border-radius: var(--r-lg); }
+      .empty .ei { width: 42px; height: 42px; border-radius: 999px; background: var(--muted); display: grid; place-items: center; color: var(--muted-foreground); font-size: 19px; }
+      .empty h4 { margin-top: 13px; font-size: 15px; }
+      .empty p { margin: 6px 0 0; font-size: 13px; color: var(--muted-foreground); max-width: 42ch; }
+
+      .block-label { font-size: 11px; color: var(--muted-foreground); text-transform: none; margin: 30px 0 10px; padding-top: 20px; border-top: 1px dashed var(--border); }
+      h2.sec-h { font-size: 13px; color: var(--muted-foreground); font-weight: 600; margin-bottom: 12px; }
+      @media (max-width: 760px) { .app { grid-template-columns: 1fr; } .sidebar { display: none; } }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand"><span class="mark">C</span> CampLus</div>
+        <nav class="nav">
+          <a><span class="ic"></span>个人首页</a>
+          <a class="on" onclick="show('catalog')"><span class="ic"></span>课程</a>
+          <a><span class="ic"></span>选课评课</a>
+          <a><span class="ic"></span>组织社团</a>
+          <a><span class="ic"></span>行政通知</a>
+        </nav>
+        <div class="foot">学生自治 · 实名可追溯</div>
+      </aside>
+
+      <div>
+        <header class="topbar">
+          <div class="tsearch">🔍 搜索课程、组织、通知…</div>
+          <button class="toggle" onclick="document.documentElement.classList.toggle('dark')">浅 / 深</button>
+          <div class="avatar">林晚</div>
+        </header>
+
+        <div class="content">
+          <div class="notice">风格 · 清爽白：纯白、中性冷灰、内容优先、克制触感。无纸纹 / 无暖色 / 无便利贴 / 无大投影。</div>
+
+          <!-- ============ 课程目录 ============ -->
+          <div id="catalog">
+            <div class="page-h"><h1>课程</h1><div class="sub">你修读的课程。每门课是一个由同学共同维护的结构化仪表盘。</div></div>
+
+            <div class="toolbar">
+              <div class="fieldsearch">🔍 搜索课程名称、代码、院系…</div>
+              <button class="btn outline sm">院系 ▾</button>
+              <button class="btn outline sm">类别 ▾</button>
+              <button class="btn outline sm">学分 ▾</button>
+              <button class="btn outline sm">工作量 ▾</button>
+            </div>
+
+            <!-- 可移除的已选筛选项 -->
+            <div class="fchips">
+              <span class="lbl">已筛选</span>
+              <span class="fchip">计算机科学与技术 <button aria-label="移除">×</button></span>
+              <span class="fchip">专业必修 <button aria-label="移除">×</button></span>
+              <button class="btn ghost sm">清除全部</button>
+            </div>
+
+            <div class="countline">4 门课程</div>
+
+            <div class="catalog">
+              <div class="card ccard" onclick="show('detail')">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="badge code">CS101</span><span class="badge">专业必修</span></div>
+                <h3>数据结构与算法</h3>
+                <div class="meta">计算机科学与技术 · 4 学分 · 周则明</div>
+                <div class="desc">线性结构、树、图及其算法；复杂度分析与算法设计方法。</div>
+                <div class="foot"><span class="dot" style="background:var(--node-assignment)"></span><span style="color:color-mix(in oklch,var(--foreground) 80%,transparent)">作业 3 · 二叉树遍历</span><span class="pill soon" style="margin-left:auto">明天</span></div>
+              </div>
+              <div class="card ccard">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="badge code">CS150</span><span class="badge">专业必修</span></div>
+                <h3>计算机系统基础</h3>
+                <div class="meta">计算机科学与技术 · 3 学分 · 何戟</div>
+                <div class="desc">从 C 到汇编到体系结构，理解程序如何在机器上运行。</div>
+                <div class="foot muted">本周 2 项更新</div>
+              </div>
+              <div class="card ccard">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="badge code">MATH201</span><span class="badge">通识必修</span></div>
+                <h3>概率论与数理统计</h3>
+                <div class="meta">数学科学学院 · 3 学分 · 郑412</div>
+                <div class="desc" style="font-style:italic;opacity:0.75">课程简介待同学补充</div>
+                <div class="foot"><span class="dot" style="background:var(--node-exam)"></span><span style="color:color-mix(in oklch,var(--foreground) 80%,transparent)">期中考试</span><span class="pill mut" style="margin-left:auto">10 天后</span></div>
+              </div>
+              <div class="card ccard">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="badge code">CS220</span><span class="badge">专业选修</span></div>
+                <h3>数据库系统</h3>
+                <div class="meta">计算机科学与技术 · 3 学分</div>
+                <div class="desc">关系模型、SQL、事务与并发控制、查询优化。</div>
+                <div class="foot muted">🗓 本学期未开课 · 2 个归档学期</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ 课程详情 ============ -->
+          <div id="detail" style="display:none">
+            <div class="back" onclick="show('catalog')">← 返回课程目录</div>
+
+            <!-- 课程头部：节而非卡片 -->
+            <div class="detail-h">
+              <div class="toprow">
+                <span class="badge code">CS101</span>
+                <span class="badge">专业必修</span>
+                <span class="pill ok" style="margin-left:auto">本学期开课</span>
+              </div>
+              <h1>数据结构与算法</h1>
+              <div class="meta"><span>计算机科学与技术学院</span><span class="sep">·</span><span>4 学分</span><span class="sep">·</span><span>任课 周则明</span><span class="sep">·</span><span>128 人修读</span></div>
+              <p class="desc">线性结构、树、图及其算法；复杂度分析与算法设计方法。本学期配套编程项目，三人一组完成。</p>
+              <div class="maint">🛡 维护者 <span style="color:color-mix(in oklch,var(--foreground) 80%,transparent)">陈野、苏青</span></div>
+              <div style="margin-top:14px"><span class="seg"><button class="on">2026 秋</button><button>2025 秋 🔒</button></span></div>
+            </div>
+
+            <hr class="sep" />
+
+            <!-- 本学期概览：节 + 分隔，不是卡片 -->
+            <h2 class="sec-h">本学期概览</h2>
+            <div class="facts">
+              <div class="f"><div class="fk">下一个截止</div><div class="fv"><span class="dot" style="background:var(--node-assignment)"></span>作业 3 <span class="pill soon">明天</span></div></div>
+              <div class="f"><div class="fk">最近更新</div><div class="fv">10 月 5 日</div></div>
+              <div class="f"><div class="fk">学分</div><div class="fv">4</div></div>
+              <div class="f"><div class="fk">修读人数</div><div class="fv">128</div></div>
+            </div>
+            <div class="legend">
+              <span><span class="dot" style="background:var(--node-announcement)"></span>公告</span>
+              <span><span class="dot" style="background:var(--node-assignment)"></span>作业</span>
+              <span><span class="dot" style="background:var(--node-exam)"></span>考试</span>
+              <span><span class="dot" style="background:var(--node-material)"></span>资料</span>
+              <span><span class="dot" style="background:var(--node-milestone)"></span>里程碑</span>
+            </div>
+
+            <hr class="sep" />
+
+            <!-- Timeline -->
+            <h2 class="sec-h">课程 Timeline</h2>
+            <div class="tl-sec">
+              <div class="week-h"><span class="mk cur"></span><h3>第 5 周</h3><span class="pill" style="background:color-mix(in oklch,var(--primary) 10%,transparent);color:var(--primary)">本周</span><span class="ln"></span></div>
+              <div class="tl-group">
+                <div class="card tnode"><span class="rail" style="background:var(--node-announcement)"></span>
+                  <div class="top"><div class="types"><span class="nbadge" style="--c:var(--node-announcement)">📢 公告</span></div></div>
+                  <h4>本周起上课教室调整至 工三 301</h4>
+                  <p>因原教室设备检修，自第 5 周起全部课次移至工程三馆 301，持续两周。</p>
+                  <div class="foot"><span>🎓 课堂宣布 · 据辅导员群通知</span><span>由 林晚 创建</span><span>编辑 1 次</span></div>
+                </div>
+                <div class="card tnode"><span class="rail" style="background:var(--node-assignment)"></span>
+                  <div class="top"><div class="types"><span class="nbadge" style="--c:var(--node-assignment)">📝 作业</span></div><span class="pill soon">⏰ 截止 10月8日 · 明天</span></div>
+                  <h4>作业 3 · 二叉树遍历</h4>
+                  <p>实现前 / 中 / 后序的递归与迭代版本，并比较其空间占用。</p>
+                  <div class="foot"><span>🎓 课堂宣布</span><span>由 陈野 创建</span><span>💬 7</span></div>
+                </div>
+              </div>
+
+              <div class="week-h"><span class="mk cur" style="background:var(--node-exam)"></span><h3>第 6 周</h3><span class="ln"></span></div>
+              <div class="tl-group">
+                <div class="card tnode"><span class="rail" style="background:var(--node-exam)"></span>
+                  <div class="top"><div class="types"><span class="nbadge" style="--c:var(--node-exam)">📄 考试</span><span class="pill ok">✓ 官方确认</span></div><span class="pill mut">10月20日 14:00</span></div>
+                  <h4>期中考试</h4>
+                  <p>范围：第 1–7 周全部内容。闭卷，允许一张 A4 手写公式纸。</p>
+                  <div class="foot"><span>🎓 课堂宣布</span><span>由 周则明 创建</span><span>💬 9</span></div>
+                </div>
+              </div>
+
+              <div class="week-h"><span class="mk past"></span><h3 class="muted">第 8 周</h3><span class="muted" style="font-size:12px">已结束</span><span class="ln"></span></div>
+              <div class="tl-group">
+                <div class="card tnode"><span class="rail" style="background:var(--node-milestone)"></span>
+                  <div class="top"><div class="types"><span class="nbadge" style="--c:var(--node-milestone)">🚩 里程碑</span></div><span class="pill mut">11月1日</span></div>
+                  <h4>课程项目 · 选题截止</h4>
+                  <p>三人一组，提交选题与一页提案。可选方向见资料区项目手册。</p>
+                  <div class="foot"><span>📋 据课程大纲</span><span>由 苏青 创建</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 归档 alert 示例 -->
+            <div class="block-label">示例 · 查看历史归档学期时的提示（alert 允许作为有界异常状态）</div>
+            <div class="alert"><span class="ai">🗄</span><div>你正在查看 <b style="font-weight:600">2025 秋</b> 的历史归档，内容只读。切换到当前学期可参与编辑。</div></div>
+
+            <!-- 空状态示例 -->
+            <div class="block-label">示例 · 空状态（起点提示，不是空白页）</div>
+            <div class="empty"><div class="ei">🗓</div><h4>这个学期还没有内容</h4><p>Timeline 由修读这门课的同学共同维护。添加第一个公告、作业或资料，让它开始生长。</p><button class="btn primary sm" style="margin-top:14px">+ 添加节点</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function show(id) {
+        document.getElementById('catalog').style.display = id === 'catalog' ? '' : 'none';
+        document.getElementById('detail').style.display = id === 'detail' ? '' : 'none';
+        window.scrollTo(0, 0);
+      }
+    </script>
+  </body>
+</html>

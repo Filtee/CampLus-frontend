@@ -1,0 +1,221 @@
+/* ──────────────────────────────────────────────────────────────
+   CampLus theme tokens.
+
+   This file is the single source of truth for design tokens and is
+   structured to be replaceable by a TweakCN (https://tweakcn.com)
+   export with minimal changes: keep :root / .dark raw values and the
+   @theme inline mappings; feature components reference only the
+   semantic utility classes they generate.
+
+   Retained domain tokens (NOT part of standard shadcn — kept because
+   they carry real product meaning that base tokens cannot express):
+     --success / --warning / --info  : deadline urgency + official vs
+       provisional status cues in the timeline.
+     --node-*                        : the five Timeline node-type
+       colours (announcement/assignment/exam/material/milestone).
+   ────────────────────────────────────────────────────────────── */
+
+:root {
+  --radius: 0.625rem;
+
+  --background: oklch(0.994 0.002 265);
+  --foreground: oklch(0.21 0.015 270);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.015 270);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.015 270);
+
+  /* Primary: restrained indigo */
+  --primary: oklch(0.52 0.17 266);
+  --primary-foreground: oklch(0.985 0.004 266);
+
+  --secondary: oklch(0.967 0.006 265);
+  --secondary-foreground: oklch(0.3 0.02 266);
+  --muted: oklch(0.967 0.006 265);
+  --muted-foreground: oklch(0.52 0.015 266);
+  --accent: oklch(0.95 0.025 266);
+  --accent-foreground: oklch(0.4 0.1 266);
+
+  --destructive: oklch(0.58 0.21 24);
+  --destructive-foreground: oklch(0.985 0.004 24);
+  --border: oklch(0.92 0.005 265);
+  --input: oklch(0.92 0.005 265);
+  --ring: oklch(0.52 0.17 266);
+
+  /* Domain status tokens (see header) */
+  --success: oklch(0.6 0.13 158);
+  --success-foreground: oklch(0.985 0.01 158);
+  --warning: oklch(0.72 0.15 72);
+  --warning-foreground: oklch(0.26 0.05 72);
+  --info: oklch(0.6 0.13 240);
+  --info-foreground: oklch(0.985 0.01 240);
+
+  /* Domain: Timeline node-type colours (see header) */
+  --node-announcement: oklch(0.58 0.13 240);
+  --node-assignment: oklch(0.68 0.15 68);
+  --node-exam: oklch(0.58 0.2 22);
+  --node-material: oklch(0.56 0.15 288);
+  --node-milestone: oklch(0.6 0.13 160);
+
+  --chart-1: oklch(0.52 0.17 266);
+  --chart-2: oklch(0.6 0.13 240);
+  --chart-3: oklch(0.6 0.13 160);
+  --chart-4: oklch(0.72 0.15 72);
+  --chart-5: oklch(0.58 0.2 22);
+
+  --sidebar: oklch(0.985 0.003 265);
+  --sidebar-foreground: oklch(0.21 0.015 270);
+  --sidebar-primary: oklch(0.52 0.17 266);
+  --sidebar-primary-foreground: oklch(0.985 0.004 266);
+  --sidebar-accent: oklch(0.95 0.025 266);
+  --sidebar-accent-foreground: oklch(0.4 0.1 266);
+  --sidebar-border: oklch(0.92 0.005 265);
+  --sidebar-ring: oklch(0.52 0.17 266);
+
+  /* Shadows (neutral; TweakCN overwrites these as a set) */
+  --shadow-2xs: 0 1px 2px 0 oklch(0 0 0 / 0.04);
+  --shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+  --shadow: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.25);
+}
+
+.dark {
+  --background: oklch(0.19 0.014 270);
+  --foreground: oklch(0.96 0.004 265);
+  --card: oklch(0.225 0.016 270);
+  --card-foreground: oklch(0.96 0.004 265);
+  --popover: oklch(0.225 0.016 270);
+  --popover-foreground: oklch(0.96 0.004 265);
+
+  --primary: oklch(0.64 0.16 266);
+  --primary-foreground: oklch(0.16 0.02 266);
+
+  --secondary: oklch(0.27 0.016 270);
+  --secondary-foreground: oklch(0.96 0.004 265);
+  --muted: oklch(0.27 0.016 270);
+  --muted-foreground: oklch(0.71 0.012 266);
+  --accent: oklch(0.32 0.04 266);
+  --accent-foreground: oklch(0.92 0.03 266);
+
+  --destructive: oklch(0.7 0.19 22);
+  --destructive-foreground: oklch(0.16 0.03 22);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.64 0.16 266);
+
+  --success: oklch(0.7 0.13 158);
+  --success-foreground: oklch(0.16 0.03 158);
+  --warning: oklch(0.8 0.14 76);
+  --warning-foreground: oklch(0.22 0.05 76);
+  --info: oklch(0.7 0.13 240);
+  --info-foreground: oklch(0.16 0.03 240);
+
+  --node-announcement: oklch(0.72 0.13 240);
+  --node-assignment: oklch(0.78 0.14 72);
+  --node-exam: oklch(0.7 0.18 22);
+  --node-material: oklch(0.7 0.15 288);
+  --node-milestone: oklch(0.72 0.13 160);
+
+  --chart-1: oklch(0.64 0.16 266);
+  --chart-2: oklch(0.7 0.13 240);
+  --chart-3: oklch(0.72 0.13 160);
+  --chart-4: oklch(0.8 0.14 76);
+  --chart-5: oklch(0.7 0.18 22);
+
+  --sidebar: oklch(0.17 0.014 270);
+  --sidebar-foreground: oklch(0.96 0.004 265);
+  --sidebar-primary: oklch(0.64 0.16 266);
+  --sidebar-primary-foreground: oklch(0.16 0.02 266);
+  --sidebar-accent: oklch(0.32 0.04 266);
+  --sidebar-accent-foreground: oklch(0.92 0.03 266);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.64 0.16 266);
+
+  --shadow-2xs: 0 1px 2px 0 oklch(0 0 0 / 0.2);
+  --shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.25);
+  --shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.3), 0 1px 2px -1px oklch(0 0 0 / 0.3);
+  --shadow: 0 1px 3px 0 oklch(0 0 0 / 0.3), 0 1px 2px -1px oklch(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.3), 0 2px 4px -2px oklch(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.3), 0 4px 6px -4px oklch(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.3), 0 8px 10px -6px oklch(0 0 0 / 0.3);
+  --shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.5);
+}
+
+@theme inline {
+  /* Typography */
+  --font-sans: 'Noto Sans SC Variable', 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', monospace;
+
+  /* Standard shadcn colour mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Domain status (see file header) */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* Domain: Timeline node-type colours */
+  --color-node-announcement: var(--node-announcement);
+  --color-node-assignment: var(--node-assignment);
+  --color-node-exam: var(--node-exam);
+  --color-node-material: var(--node-material);
+  --color-node-milestone: var(--node-milestone);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Radius scale */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  /* Shadow scale */
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+}

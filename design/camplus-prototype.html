@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampLus 产品原型 · Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ─── tokens（镜像 src/styles/theme.css）─── */
+      :root {
+        --radius: 0.625rem;
+        --background: oklch(0.994 0.002 265);
+        --foreground: oklch(0.21 0.015 270);
+        --card: oklch(1 0 0);
+        --card-foreground: oklch(0.21 0.015 270);
+        --primary: oklch(0.52 0.17 266);
+        --primary-foreground: oklch(0.985 0.004 266);
+        --secondary: oklch(0.967 0.006 265);
+        --muted: oklch(0.967 0.006 265);
+        --muted-foreground: oklch(0.52 0.015 266);
+        --accent: oklch(0.95 0.025 266);
+        --accent-foreground: oklch(0.4 0.1 266);
+        --destructive: oklch(0.58 0.21 24);
+        --border: oklch(0.92 0.005 265);
+        --success: oklch(0.6 0.13 158);
+        --warning: oklch(0.72 0.15 72);
+        --info: oklch(0.6 0.13 240);
+        --node-announcement: oklch(0.58 0.13 240);
+        --node-assignment: oklch(0.68 0.15 68);
+        --node-exam: oklch(0.58 0.2 22);
+        --node-material: oklch(0.56 0.15 288);
+        --node-milestone: oklch(0.6 0.13 160);
+        --sidebar: oklch(0.985 0.003 265);
+        --shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+        --shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+        --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
+      }
+      .dark {
+        --background: oklch(0.19 0.014 270);
+        --foreground: oklch(0.96 0.004 265);
+        --card: oklch(0.225 0.016 270);
+        --card-foreground: oklch(0.96 0.004 265);
+        --primary: oklch(0.64 0.16 266);
+        --primary-foreground: oklch(0.16 0.02 266);
+        --secondary: oklch(0.27 0.016 270);
+        --muted: oklch(0.27 0.016 270);
+        --muted-foreground: oklch(0.71 0.012 266);
+        --accent: oklch(0.32 0.04 266);
+        --accent-foreground: oklch(0.92 0.03 266);
+        --destructive: oklch(0.7 0.19 22);
+        --border: oklch(1 0 0 / 10%);
+        --success: oklch(0.7 0.13 158);
+        --warning: oklch(0.8 0.14 76);
+        --info: oklch(0.7 0.13 240);
+        --node-announcement: oklch(0.72 0.13 240);
+        --node-assignment: oklch(0.78 0.14 72);
+        --node-exam: oklch(0.7 0.18 22);
+        --node-material: oklch(0.7 0.15 288);
+        --node-milestone: oklch(0.72 0.13 160);
+        --sidebar: oklch(0.17 0.014 270);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+        background: var(--background);
+        color: var(--foreground);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      h1, h2, h3, h4 { letter-spacing: -0.02em; margin: 0; }
+      .muted { color: var(--muted-foreground); }
+
+      /* ─── shell ─── */
+      .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+      .sidebar { background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; padding: 18px 20px; }
+      .brand .mark { width: 30px; height: 30px; border-radius: 9px; background: var(--primary); color: var(--primary-foreground); display: grid; place-items: center; font-weight: 700; box-shadow: var(--shadow-sm); }
+      .nav { padding: 6px 12px; overflow-y: auto; flex: 1; }
+      .nav .group { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); padding: 14px 12px 6px; }
+      .nav a { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 9px; font-size: 14px; color: var(--muted-foreground); text-decoration: none; cursor: pointer; font-weight: 500; }
+      .nav a .ic { width: 17px; height: 17px; flex: none; }
+      .nav a:hover { background: color-mix(in oklch, var(--accent) 60%, transparent); color: var(--accent-foreground); }
+      .nav a.on { background: var(--accent); color: var(--accent-foreground); }
+      .sidebar .foot { padding: 12px 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted-foreground); }
+
+      .main { display: flex; flex-direction: column; min-width: 0; }
+      .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 28px; border-bottom: 1px solid var(--border); background: color-mix(in oklch, var(--background) 82%, transparent); backdrop-filter: blur(12px); }
+      .search { display: flex; align-items: center; gap: 8px; height: 36px; width: 100%; max-width: 420px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: color-mix(in oklch, var(--muted) 50%, transparent); color: var(--muted-foreground); font-size: 13px; cursor: pointer; }
+      .search .kbd { margin-left: auto; font-size: 10px; border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; }
+      .toggle { cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--foreground); border-radius: 8px; padding: 7px 12px; font-size: 12px; font-family: inherit; }
+      .avatar { width: 32px; height: 32px; border-radius: 999px; background: color-mix(in oklch, var(--primary) 12%, transparent); color: var(--primary); display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+
+      .content { padding: 28px; max-width: 1080px; width: 100%; margin: 0 auto; }
+      .screen { display: none; }
+      .screen.on { display: block; animation: fade 0.25s ease; }
+      @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+      .phead { margin-bottom: 22px; }
+      .phead h1 { font-size: 26px; } .phead .sub { color: var(--muted-foreground); margin-top: 4px; }
+
+      /* ─── primitives ─── */
+      .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-xs); }
+      .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 9px; font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; border: 1px solid transparent; }
+      .btn.primary { background: var(--primary); color: var(--primary-foreground); }
+      .btn.outline { background: var(--card); border-color: var(--border); color: var(--foreground); }
+      .btn.sm { height: 28px; font-size: 12px; padding: 0 10px; }
+      .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 999px; }
+      .chip.sec { background: var(--secondary); color: var(--muted-foreground); }
+      .chip.pri { background: color-mix(in oklch, var(--primary) 10%, transparent); color: var(--primary); }
+      .dot { width: 8px; height: 8px; border-radius: 999px; flex: none; display: inline-block; }
+      .grid2 { display: grid; grid-template-columns: 1fr; gap: 20px; } @media (min-width: 900px){ .grid2 { grid-template-columns: 2fr 1fr; } }
+
+      /* ─── calendar (Apple-style) ─── */
+      .cal-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+      .seg { margin-left: auto; display: inline-flex; background: var(--muted); border-radius: 9px; padding: 3px; }
+      .seg button { border: 0; background: transparent; font-family: inherit; font-size: 13px; color: var(--muted-foreground); padding: 5px 12px; border-radius: 7px; cursor: pointer; }
+      .seg button.on { background: var(--card); color: var(--foreground); box-shadow: var(--shadow-xs); font-weight: 500; }
+      .cal-head { display: grid; grid-template-columns: 48px repeat(7, 1fr); border-bottom: 1px solid var(--border); }
+      .cal-head .dh { text-align: center; padding: 4px 0 8px; }
+      .cal-head .dow { font-size: 12px; color: var(--muted-foreground); }
+      .cal-head .dnum { font-size: 14px; font-weight: 600; margin-top: 2px; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 999px; }
+      .cal-head .today .dow { color: var(--primary); }
+      .cal-head .today .dnum { background: var(--primary); color: var(--primary-foreground); }
+      .cal-grid { display: grid; grid-template-columns: 48px repeat(7, 1fr); margin-top: 2px; }
+      .cal-gutter { position: relative; height: 616px; }
+      .cal-gutter .hr { position: absolute; right: 7px; font-size: 10px; color: var(--muted-foreground); transform: translateY(-50%); }
+      .cal-col { position: relative; height: 616px; border-left: 1px solid var(--border); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 55px, var(--border) 55px, var(--border) 56px); }
+      .cal-col.weekend { background-color: color-mix(in oklch, var(--muted) 40%, transparent); }
+      .evt { position: absolute; left: 4px; right: 4px; border-radius: 7px; padding: 5px 7px; overflow: hidden; background: color-mix(in oklch, var(--c) 13%, var(--card)); border-left: 3px solid var(--c); box-shadow: var(--shadow-xs); }
+      .evt .t { font-size: 12px; font-weight: 600; color: color-mix(in oklch, var(--c) 70%, var(--foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .evt .m { font-size: 10.5px; color: var(--muted-foreground); }
+      .nowline { position: absolute; left: 0; right: 0; height: 2px; background: var(--destructive); z-index: 3; }
+      .nowline::before { content: ''; position: absolute; left: -4px; top: -3px; width: 8px; height: 8px; border-radius: 999px; background: var(--destructive); }
+
+      /* ─── course cards / lists ─── */
+      .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 15px; }
+      .ccard { padding: 17px; display: flex; flex-direction: column; min-height: 142px; cursor: pointer; }
+      .ccard:hover { border-color: color-mix(in oklch, var(--primary) 40%, var(--border)); box-shadow: var(--shadow-md); }
+      .ccard .code { font-size: 12px; font-weight: 600; color: var(--primary); background: color-mix(in oklch, var(--primary) 10%, transparent); padding: 2px 7px; border-radius: 6px; }
+      .ccard h4 { margin: 13px 0 2px; font-size: 15px; }
+      .ccard .due { margin-top: auto; padding-top: 13px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-size: 13px; }
+      .uprow { display: flex; align-items: center; gap: 10px; padding: 11px 13px; margin-bottom: 8px; }
+      .uprow .ud { margin-left: auto; font-size: 13px; font-weight: 600; }
+
+      /* ─── timeline ─── */
+      .week-h { display: flex; align-items: center; gap: 12px; margin: 22px 0 12px; }
+      .week-h .ln { height: 1px; flex: 1; background: var(--border); }
+      .tnode { position: relative; padding: 15px 17px 15px 19px; overflow: hidden; margin-bottom: 11px; }
+      .tnode .rail { position: absolute; inset: 0 auto 0 0; width: 4px; }
+      .nchip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--c); color: var(--c); background: color-mix(in oklch, var(--c) 10%, transparent); }
+      .duepill { margin-left: auto; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 999px; background: var(--muted); color: var(--muted-foreground); }
+      .duepill.soon { background: color-mix(in oklch, var(--warning) 18%, transparent); color: color-mix(in oklch, var(--warning) 72%, var(--foreground)); }
+      .duepill.over { background: color-mix(in oklch, var(--destructive) 12%, transparent); color: var(--destructive); }
+      .tnode .foot { margin-top: 13px; display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--muted-foreground); flex-wrap: wrap; }
+
+      /* ─── search / filters ─── */
+      .discover-layout { display: grid; grid-template-columns: 220px 1fr; gap: 22px; } @media (max-width: 860px){ .discover-layout { grid-template-columns: 1fr; } }
+      .filter h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin: 16px 0 8px; }
+      .filter label { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0; cursor: pointer; }
+      .srow { display: flex; align-items: center; gap: 16px; padding: 15px 17px; margin-bottom: 10px; cursor: pointer; }
+      .srow:hover { border-color: color-mix(in oklch, var(--primary) 40%, var(--border)); box-shadow: var(--shadow-sm); }
+      .srow .scode { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--primary); width: 76px; flex: none; }
+      .srow .sstats { margin-left: auto; display: flex; gap: 20px; text-align: center; flex: none; }
+      .srow .sstat .v { font-size: 15px; font-weight: 700; } .srow .sstat .k { font-size: 10px; color: var(--muted-foreground); }
+
+      /* ─── stat tiles & charts ─── */
+      .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 14px; }
+      .tile { padding: 15px 17px; }
+      .tile .k { font-size: 12px; color: var(--muted-foreground); }
+      .tile .v { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; }
+      .tile .v small { font-size: 14px; font-weight: 500; color: var(--muted-foreground); }
+
+      .chartcard { padding: 18px 20px; }
+      .chartcard .ct { font-size: 14px; font-weight: 600; } .chartcard .cs { font-size: 12px; color: var(--muted-foreground); margin-bottom: 16px; }
+      /* grade histogram */
+      .hist { display: flex; align-items: flex-end; gap: 8px; height: 170px; padding-top: 18px; border-bottom: 1px solid var(--border); }
+      .hist .bar { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; position: relative; }
+      .hist .bar .fill { width: 100%; max-width: 34px; background: var(--primary); border-radius: 4px 4px 0 0; transition: 0.2s; }
+      .hist .bar.median .fill { background: var(--primary); outline: 2px solid var(--card); box-shadow: 0 0 0 2px var(--primary); }
+      .hist .bar .pct { position: absolute; top: -16px; font-size: 10px; color: var(--muted-foreground); }
+      .hist-x { display: flex; gap: 8px; margin-top: 6px; }
+      .hist-x span { flex: 1; text-align: center; font-size: 11px; color: var(--muted-foreground); }
+      .hist-x span.median { color: var(--primary); font-weight: 600; }
+      /* rating bars */
+      .rbar { margin-bottom: 13px; }
+      .rbar .rl { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; } .rbar .rl .rv { font-weight: 600; }
+      .rtrack { height: 8px; border-radius: 999px; background: var(--muted); overflow: hidden; }
+      .rtrack .rfill { height: 100%; border-radius: 999px; background: var(--primary); }
+      /* mini enrollment bars */
+      .mini { display: flex; align-items: flex-end; gap: 10px; height: 90px; }
+      .mini .mb { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; justify-content: flex-end; height: 100%; }
+      .mini .mb .mf { width: 100%; max-width: 28px; background: color-mix(in oklch, var(--primary) 55%, transparent); border-radius: 4px 4px 0 0; }
+      .mini .mb .mk { font-size: 10px; color: var(--muted-foreground); }
+
+      /* reviews */
+      .review { padding: 15px 17px; margin-bottom: 11px; }
+      .review .rh { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+      .stars { color: var(--warning); font-size: 13px; letter-spacing: 1px; }
+
+      /* schedule builder */
+      .sb-layout { display: grid; grid-template-columns: 240px 1fr; gap: 22px; } @media (max-width: 860px){ .sb-layout { grid-template-columns: 1fr; } }
+      .sb-course { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 8px; }
+      .sb-course .sw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+
+      /* orgs */
+      .orgcard { padding: 18px; }
+      .orgcard .logo { width: 44px; height: 44px; border-radius: 11px; display: grid; place-items: center; font-size: 18px; font-weight: 700; color: #fff; }
+      .act { display: flex; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--border); }
+      .act .when { width: 54px; flex: none; text-align: center; }
+      .act .when .d { font-size: 19px; font-weight: 700; } .act .when .mo { font-size: 11px; color: var(--muted-foreground); }
+
+      /* notices */
+      .ncat { margin-bottom: 22px; }
+      .ncat h3 { font-size: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+      .nrow { display: flex; align-items: center; gap: 12px; padding: 12px 15px; margin-bottom: 8px; }
+      .nrow .src { font-size: 11px; color: var(--muted-foreground); background: var(--secondary); padding: 2px 8px; border-radius: 6px; flex: none; }
+
+      .ban { display: flex; align-items: center; gap: 10px; padding: 11px 15px; border-radius: 10px; background: color-mix(in oklch, var(--info) 10%, transparent); border: 1px solid color-mix(in oklch, var(--info) 25%, transparent); font-size: 13px; color: color-mix(in oklch, var(--info) 70%, var(--foreground)); margin-bottom: 18px; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- ───────── SIDEBAR ───────── -->
+      <aside class="sidebar">
+        <div class="brand"><span class="mark">C</span> CampLus</div>
+        <nav class="nav">
+          <a data-screen="home" class="on">🏠 个人首页</a>
+          <a data-screen="course">📚 课程仪表盘</a>
+          <div class="group">选课 × 评课</div>
+          <a data-screen="discover">🔍 课程搜索</a>
+          <a data-screen="profile">📊 课程档案</a>
+          <a data-screen="schedule">🗓️ 排课助手</a>
+          <a data-screen="evaluate">✍️ 教学评价</a>
+          <div class="group">社区</div>
+          <a data-screen="orgs">👥 组织与社团</a>
+          <a data-screen="notices">🔔 行政通知</a>
+        </nav>
+        <div class="foot">学生自治 · 实名可追溯</div>
+      </aside>
+
+      <!-- ───────── MAIN ───────── -->
+      <div class="main">
+        <header class="topbar">
+          <div class="search" onclick="go('discover')">
+            🔍 <span>搜索课程、组织、通知…</span><span class="kbd mono">⌘K</span>
+          </div>
+          <button class="toggle" onclick="document.documentElement.classList.toggle('dark')">浅 / 深</button>
+          <div class="avatar">林晚</div>
+        </header>
+
+        <div class="content">
+          <!-- ============ 1. 个人首页 ============ -->
+          <section class="screen on" id="screen-home">
+            <div class="phead"><h1>下午好，林晚</h1><div class="sub">本学期 4 门课 · 待跟进 3 项 · 第 5 教学周</div></div>
+
+            <div class="card" style="padding:18px 20px;">
+              <div class="cal-top">
+                <h3 style="font-size:16px;">本周课表</h3>
+                <span class="muted" style="font-size:13px;">2026 年 10 月</span>
+                <span class="seg"><button>日</button><button class="on">周</button><button>月</button></span>
+              </div>
+              <div class="cal-head">
+                <div></div>
+                <div class="dh"><div class="dow">周一</div><div class="dnum">10</div></div>
+                <div class="dh"><div class="dow">周二</div><div class="dnum">11</div></div>
+                <div class="dh today"><div class="dow">周三</div><div class="dnum">12</div></div>
+                <div class="dh"><div class="dow">周四</div><div class="dnum">13</div></div>
+                <div class="dh"><div class="dow">周五</div><div class="dnum">14</div></div>
+                <div class="dh"><div class="dow">周六</div><div class="dnum">15</div></div>
+                <div class="dh"><div class="dow">周日</div><div class="dnum">16</div></div>
+              </div>
+              <div class="cal-grid">
+                <div class="cal-gutter">
+                  <div class="hr" style="top:0">8</div><div class="hr" style="top:56px">9</div><div class="hr" style="top:112px">10</div><div class="hr" style="top:168px">11</div><div class="hr" style="top:224px">12</div><div class="hr" style="top:280px">13</div><div class="hr" style="top:336px">14</div><div class="hr" style="top:392px">15</div><div class="hr" style="top:448px">16</div><div class="hr" style="top:504px">17</div><div class="hr" style="top:560px">18</div>
+                </div>
+                <div class="cal-col">
+                  <div class="evt" style="--c:var(--node-milestone);top:0;height:90px"><div class="t">概率论与数理统计</div><div class="m">08:00 理教 201</div></div>
+                  <div class="evt" style="--c:var(--primary);top:112px;height:90px"><div class="t">数据结构与算法</div><div class="m">10:00 工三 301</div></div>
+                </div>
+                <div class="cal-col"><div class="evt" style="--c:var(--info);top:336px;height:90px"><div class="t">计算机系统基础</div><div class="m">14:00 二教 410</div></div></div>
+                <div class="cal-col">
+                  <div class="evt" style="--c:var(--node-milestone);top:0;height:90px"><div class="t">概率论与数理统计</div><div class="m">08:00 理教 201</div></div>
+                  <div class="evt" style="--c:var(--primary);top:112px;height:90px"><div class="t">数据结构与算法</div><div class="m">10:00 工三 301</div></div>
+                  <div class="nowline" style="top:138px"></div>
+                </div>
+                <div class="cal-col">
+                  <div class="evt" style="--c:var(--info);top:336px;height:90px"><div class="t">计算机系统基础</div><div class="m">14:00 二教 410</div></div>
+                  <div class="evt" style="--c:var(--warning);top:448px;height:90px"><div class="t">数据库系统</div><div class="m">16:00 工三 505</div></div>
+                </div>
+                <div class="cal-col"><div class="evt" style="--c:var(--primary);top:112px;height:90px"><div class="t">数据结构与算法</div><div class="m">10:00 工三 301</div></div></div>
+                <div class="cal-col weekend"></div>
+                <div class="cal-col weekend"></div>
+              </div>
+            </div>
+
+            <div class="grid2" style="margin-top:22px;">
+              <div>
+                <h3 style="font-size:14px;margin-bottom:12px;" class="muted">我的课程</h3>
+                <div class="cards">
+                  <div class="card ccard" onclick="go('course')">
+                    <div style="display:flex;justify-content:space-between;align-items:center"><span class="code">CS101</span><span class="chip sec">专业必修</span></div>
+                    <h4>数据结构与算法</h4><div class="muted" style="font-size:12px">周则明 · 2026 秋</div>
+                    <div class="due"><span class="dot" style="background:var(--node-assignment)"></span>作业 3 · 二叉树遍历<span style="margin-left:auto;color:var(--warning);font-weight:600">明天</span></div>
+                  </div>
+                  <div class="card ccard">
+                    <div style="display:flex;justify-content:space-between;align-items:center"><span class="code">CS150</span><span class="chip sec">专业必修</span></div>
+                    <h4>计算机系统基础</h4><div class="muted" style="font-size:12px">何戟 · 2026 秋</div>
+                    <div class="due"><span class="dot" style="background:var(--muted-foreground)"></span><span class="muted">本周 2 项更新</span></div>
+                  </div>
+                  <div class="card ccard">
+                    <div style="display:flex;justify-content:space-between;align-items:center"><span class="code">MATH201</span><span class="chip sec">通识必修</span></div>
+                    <h4>概率论与数理统计</h4><div class="muted" style="font-size:12px">郑412 · 2026 秋</div>
+                    <div class="due"><span class="dot" style="background:var(--node-exam)"></span>期中考试<span style="margin-left:auto" class="muted">10 天后</span></div>
+                  </div>
+                  <div class="card ccard">
+                    <div style="display:flex;justify-content:space-between;align-items:center"><span class="code">CS220</span><span class="chip sec">专业选修</span></div>
+                    <h4>数据库系统</h4><div class="muted" style="font-size:12px">柯岚 · 2026 秋</div>
+                    <div class="due"><span class="dot" style="background:var(--node-material)"></span>新讲义<span style="margin-left:auto" class="muted">3 天前</span></div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3 style="font-size:14px;margin-bottom:12px;" class="muted">待跟进</h3>
+                <div class="card uprow"><span class="dot" style="background:var(--node-assignment)"></span><div><div style="font-size:13px;font-weight:500">作业 3 · 二叉树遍历</div><div class="muted" style="font-size:11px">CS101 · 数据结构</div></div><span class="ud" style="color:var(--warning)">明天</span></div>
+                <div class="card uprow"><span class="dot" style="background:var(--node-exam)"></span><div><div style="font-size:13px;font-weight:500">期中考试</div><div class="muted" style="font-size:11px">CS101 · 数据结构</div></div><span class="ud muted">10 天后</span></div>
+                <div class="card uprow"><span class="dot" style="background:var(--node-milestone)"></span><div><div style="font-size:13px;font-weight:500">课程项目选题截止</div><div class="muted" style="font-size:11px">CS101 · 数据结构</div></div><span class="ud muted">26 天后</span></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ 2. 课程仪表盘 ============ -->
+          <section class="screen" id="screen-course">
+            <div class="phead">
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px"><span class="code mono" style="background:color-mix(in oklch,var(--primary) 10%,transparent);color:var(--primary);padding:2px 8px;border-radius:6px;font-weight:600">CS101</span><span class="chip sec">专业必修</span></div>
+              <h1>数据结构与算法</h1>
+              <div class="sub">计算机科学与技术学院 · 4 学分 · 任课 周则明 · 128 人修读</div>
+              <div style="display:flex;gap:8px;margin-top:14px">
+                <button class="btn outline sm">⟲ 版本历史</button>
+                <button class="btn primary sm">✎ 贡献内容</button>
+                <span class="seg" style="margin-left:0"><button class="on">2026 秋</button><button>2025 秋 🔒</button></span>
+              </div>
+            </div>
+
+            <div class="week-h"><h3 style="font-size:13px;" class="muted">第 5 周</h3><span class="chip pri" style="height:20px">本周</span><span class="ln"></span></div>
+            <div class="card tnode"><div class="rail" style="background:var(--node-announcement)"></div>
+              <div style="display:flex;align-items:center"><span class="nchip" style="--c:var(--node-announcement)">📢 公告</span></div>
+              <h4 style="margin:11px 0 4px;font-size:15px">本周起上课教室调整至 工三 301</h4>
+              <p class="muted" style="margin:0;font-size:13.5px">因原教室设备检修，自第 5 周起全部课次移至工程三馆 301，持续两周。</p>
+              <div class="foot"><span>学生整理 · 据辅导员群通知</span><span>由 林晚 创建</span><span>编辑 1 次</span><span>💬 4</span></div>
+            </div>
+            <div class="card tnode"><div class="rail" style="background:var(--node-assignment)"></div>
+              <div style="display:flex;align-items:center"><span class="nchip" style="--c:var(--node-assignment)">📝 作业</span><span class="duepill soon">截止 10月8日 · 明天</span></div>
+              <h4 style="margin:11px 0 4px;font-size:15px">作业 3 · 二叉树遍历</h4>
+              <p class="muted" style="margin:0;font-size:13.5px">实现前/中/后序的递归与迭代版本，并比较其空间占用。</p>
+              <div class="foot"><span>课堂宣布 · 10月1日</span><span>由 陈野 创建</span><span>💬 7</span></div>
+              <div style="margin-top:13px;border-top:1px solid var(--border);padding-top:13px">
+                <div style="display:flex;gap:10px;margin-bottom:12px"><div class="avatar" style="width:28px;height:28px;font-size:11px">孟繁</div><div><div style="font-size:13px"><b>孟繁</b> <span class="muted" style="font-size:11px">10月4日 09:30</span></div><div style="font-size:13px">单元测试需要覆盖空树和单节点的边界吗？</div></div></div>
+                <div style="display:flex;gap:10px"><div class="avatar" style="width:28px;height:28px;font-size:11px">陈野</div><div><div style="font-size:13px"><b>陈野</b> <span class="muted" style="font-size:11px">10月4日 10:02</span></div><div style="font-size:13px">需要。边界用例占评分 20%，务必覆盖空树、单节点、退化成链。</div></div></div>
+              </div>
+            </div>
+            <div class="week-h"><h3 style="font-size:13px;" class="muted">第 6 周</h3><span class="ln"></span></div>
+            <div class="card tnode"><div class="rail" style="background:var(--node-exam)"></div>
+              <div style="display:flex;align-items:center"><span class="nchip" style="--c:var(--node-exam)">📄 考试</span><span class="chip" style="background:color-mix(in oklch,var(--success) 10%,transparent);color:var(--success);margin-left:8px">✓ 官方确认</span><span class="duepill">10月20日 14:00</span></div>
+              <h4 style="margin:11px 0 4px;font-size:15px">期中考试</h4>
+              <p class="muted" style="margin:0;font-size:13.5px">范围：第 1–7 周全部内容。闭卷，允许一张 A4 手写公式纸。</p>
+              <div class="foot"><span>课堂宣布 · 10月1日</span><span>由 周则明 创建</span><span>💬 9</span></div>
+            </div>
+            <div class="week-h"><h3 style="font-size:13px;" class="muted">第 8 周</h3><span class="ln"></span></div>
+            <div class="card tnode"><div class="rail" style="background:var(--node-milestone)"></div>
+              <div style="display:flex;align-items:center"><span class="nchip" style="--c:var(--node-milestone)">🚩 里程碑</span><span class="duepill">11月1日</span></div>
+              <h4 style="margin:11px 0 4px;font-size:15px">课程项目 · 选题截止</h4>
+              <p class="muted" style="margin:0;font-size:13.5px">三人一组，提交选题与一页提案。可选方向见资料区项目手册。</p>
+              <div class="foot"><span>据课程大纲</span><span>由 苏青 创建</span></div>
+            </div>
+          </section>
+
+          <!-- ============ 3. 课程搜索 ============ -->
+          <section class="screen" id="screen-discover">
+            <div class="phead"><h1>选课 × 评课</h1><div class="sub">课程搜索引擎 · 用历年数据而非玄学做决定</div></div>
+            <div class="card" style="padding:0;margin-bottom:20px"><div class="search" style="max-width:none;border:0;height:48px;background:transparent;font-size:15px;color:var(--foreground)">🔍 搜索课程名称、代码、院系…</div></div>
+            <div class="discover-layout">
+              <aside class="filter card" style="padding:16px;height:fit-content">
+                <h5 style="margin-top:0">院系</h5>
+                <label><input type="checkbox" checked>计算机科学与技术</label>
+                <label><input type="checkbox">数学科学学院</label>
+                <label><input type="checkbox">物理学院</label>
+                <h5>类别</h5>
+                <label><input type="checkbox" checked>专业必修</label>
+                <label><input type="checkbox" checked>专业选修</label>
+                <label><input type="checkbox">通识必修</label>
+                <h5>学分</h5>
+                <label><input type="radio" name="cr" checked>不限</label>
+                <label><input type="radio" name="cr">≥ 3 学分</label>
+                <h5>工作量</h5>
+                <label><input type="radio" name="wl" checked>不限</label>
+                <label><input type="radio" name="wl">轻 (&lt;6h/周)</label>
+              </aside>
+              <div>
+                <div class="muted" style="font-size:13px;margin-bottom:12px">4 门课程 · 按匹配度排序</div>
+                <div class="card srow" onclick="go('profile')">
+                  <div class="scode">CS101</div>
+                  <div style="flex:1;min-width:0"><div style="font-weight:600">数据结构与算法</div><div class="muted" style="font-size:12px">计算机科学与技术 · 4 学分 · 周则明</div></div>
+                  <div class="sstats"><div class="sstat"><div class="v">A−</div><div class="k">中位成绩</div></div><div class="sstat"><div class="v">8.5h</div><div class="k">周工作量</div></div><div class="sstat"><div class="v">4.3</div><div class="k">评分</div></div></div>
+                </div>
+                <div class="card srow">
+                  <div class="scode">CS150</div>
+                  <div style="flex:1;min-width:0"><div style="font-weight:600">计算机系统基础</div><div class="muted" style="font-size:12px">计算机科学与技术 · 3 学分 · 何戟</div></div>
+                  <div class="sstats"><div class="sstat"><div class="v">B+</div><div class="k">中位成绩</div></div><div class="sstat"><div class="v">11h</div><div class="k">周工作量</div></div><div class="sstat"><div class="v">4.0</div><div class="k">评分</div></div></div>
+                </div>
+                <div class="card srow">
+                  <div class="scode">CS220</div>
+                  <div style="flex:1;min-width:0"><div style="font-weight:600">数据库系统</div><div class="muted" style="font-size:12px">计算机科学与技术 · 3 学分 · 柯岚</div></div>
+                  <div class="sstats"><div class="sstat"><div class="v">A−</div><div class="k">中位成绩</div></div><div class="sstat"><div class="v">7h</div><div class="k">周工作量</div></div><div class="sstat"><div class="v">4.5</div><div class="k">评分</div></div></div>
+                </div>
+                <div class="card srow">
+                  <div class="scode">MATH201</div>
+                  <div style="flex:1;min-width:0"><div style="font-weight:600">概率论与数理统计</div><div class="muted" style="font-size:12px">数学科学学院 · 3 学分 · 郑412</div></div>
+                  <div class="sstats"><div class="sstat"><div class="v">B</div><div class="k">中位成绩</div></div><div class="sstat"><div class="v">9h</div><div class="k">周工作量</div></div><div class="sstat"><div class="v">3.6</div><div class="k">评分</div></div></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ 4. 课程档案页（Atlas 核心）============ -->
+          <section class="screen" id="screen-profile">
+            <div class="phead">
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px"><span class="code mono" style="background:color-mix(in oklch,var(--primary) 10%,transparent);color:var(--primary);padding:2px 8px;border-radius:6px;font-weight:600">CS101</span><span class="chip sec">专业必修 · 4 学分</span></div>
+              <h1>数据结构与算法</h1>
+              <div class="sub">计算机科学与技术学院 · 近 6 个学期开课 · 当前任课 周则明</div>
+            </div>
+
+            <div class="tiles" style="margin-bottom:20px">
+              <div class="card tile"><div class="k">中位成绩</div><div class="v">A−</div></div>
+              <div class="card tile"><div class="k">周工作量</div><div class="v">8.5<small> 小时</small></div></div>
+              <div class="card tile"><div class="k">综合评分</div><div class="v">4.3<small> / 5</small></div></div>
+              <div class="card tile"><div class="k">本学期人数</div><div class="v">128</div></div>
+            </div>
+
+            <div class="grid2">
+              <div class="card chartcard">
+                <div class="ct">成绩分布</div><div class="cs">2025 秋 · 119 人 · 中位 A−</div>
+                <div class="hist">
+                  <div class="bar median" title="A: 24%"><span class="pct">24%</span><div class="fill" style="height:85%"></div></div>
+                  <div class="bar" title="A−: 21%"><span class="pct">21%</span><div class="fill" style="height:74%"></div></div>
+                  <div class="bar" title="B+: 18%"><span class="pct">18%</span><div class="fill" style="height:64%"></div></div>
+                  <div class="bar" title="B: 14%"><span class="pct">14%</span><div class="fill" style="height:50%"></div></div>
+                  <div class="bar" title="B−: 10%"><span class="pct">10%</span><div class="fill" style="height:36%"></div></div>
+                  <div class="bar" title="C+: 6%"><span class="pct">6%</span><div class="fill" style="height:22%"></div></div>
+                  <div class="bar" title="C: 4%"><span class="pct">4%</span><div class="fill" style="height:15%"></div></div>
+                  <div class="bar" title="D: 2%"><span class="pct">2%</span><div class="fill" style="height:8%"></div></div>
+                  <div class="bar" title="F: 1%"><span class="pct">1%</span><div class="fill" style="height:4%"></div></div>
+                </div>
+                <div class="hist-x"><span class="median">A</span><span>A−</span><span>B+</span><span>B</span><span>B−</span><span>C+</span><span>C</span><span>D</span><span>F</span></div>
+              </div>
+              <div class="card chartcard">
+                <div class="ct">开课人数趋势</div><div class="cs">近 6 学期</div>
+                <div class="mini">
+                  <div class="mb"><div class="mf" style="height:62%"></div><div class="mk">23秋</div></div>
+                  <div class="mb"><div class="mf" style="height:70%"></div><div class="mk">24春</div></div>
+                  <div class="mb"><div class="mf" style="height:66%"></div><div class="mk">24秋</div></div>
+                  <div class="mb"><div class="mf" style="height:82%"></div><div class="mk">25春</div></div>
+                  <div class="mb"><div class="mf" style="height:88%"></div><div class="mk">25秋</div></div>
+                  <div class="mb"><div class="mf" style="height:100%"></div><div class="mk">26秋</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid2" style="margin-top:20px">
+              <div class="card chartcard">
+                <div class="ct">课程评价聚合</div><div class="cs">基于 86 份实名评价 · 0–5</div>
+                <div class="rbar"><div class="rl"><span>教学质量</span><span class="rv">4.5</span></div><div class="rtrack"><div class="rfill" style="width:90%"></div></div></div>
+                <div class="rbar"><div class="rl"><span>课程内容</span><span class="rv">4.4</span></div><div class="rtrack"><div class="rfill" style="width:88%"></div></div></div>
+                <div class="rbar"><div class="rl"><span>难度（越高越难）</span><span class="rv">3.8</span></div><div class="rtrack"><div class="rfill" style="width:76%"></div></div></div>
+                <div class="rbar"><div class="rl"><span>工作量（越高越重）</span><span class="rv">3.5</span></div><div class="rtrack"><div class="rfill" style="width:70%"></div></div></div>
+              </div>
+              <div class="card chartcard">
+                <div class="ct">教授评价 · 周则明</div><div class="cs">0–5</div>
+                <div class="rbar"><div class="rl"><span>讲解清晰度</span><span class="rv">4.6</span></div><div class="rtrack"><div class="rfill" style="width:92%"></div></div></div>
+                <div class="rbar"><div class="rl"><span>备课充分度</span><span class="rv">4.5</span></div><div class="rtrack"><div class="rfill" style="width:90%"></div></div></div>
+                <div class="rbar"><div class="rl"><span>对学生尊重</span><span class="rv">4.7</span></div><div class="rtrack"><div class="rfill" style="width:94%"></div></div></div>
+              </div>
+            </div>
+
+            <h3 style="font-size:15px;margin:26px 0 12px">学生评价 <span class="muted" style="font-weight:400;font-size:13px">· 实名 · 不可删除</span></h3>
+            <div class="card review">
+              <div class="rh"><div class="avatar" style="width:30px;height:30px;font-size:11px">苏青</div><div style="flex:1"><b style="font-size:13px">苏青</b> <span class="muted" style="font-size:11px">· 2025 秋 已完整修读</span></div><span class="stars">★★★★★</span></div>
+              <p style="margin:0;font-size:13.5px">内容扎实，作业有挑战但收获大。周老师答疑非常耐心，期中前会专门加一次复习课。建议提前预习递归。</p>
+            </div>
+            <div class="card review">
+              <div class="rh"><div class="avatar" style="width:30px;height:30px;font-size:11px">孟繁</div><div style="flex:1"><b style="font-size:13px">孟繁</b> <span class="muted" style="font-size:11px">· 2024 秋 已完整修读</span></div><span class="stars">★★★★☆</span></div>
+              <p style="margin:0;font-size:13.5px">工作量不轻，每周一次编程作业。图算法那两周强度较大，但对后续课程帮助很大。</p>
+            </div>
+            <button class="btn outline sm" onclick="go('evaluate')" style="margin-top:4px">我也要评价这门课 →</button>
+          </section>
+
+          <!-- ============ 5. 排课助手 ============ -->
+          <section class="screen" id="screen-schedule">
+            <div class="phead"><h1>排课助手</h1><div class="sub">把候选课程拖进来，自动检测时间冲突，生成可行课表</div></div>
+            <div class="ban">ℹ️ 仅做可视化排课与冲突检测，暂不接入教务系统直接选课。</div>
+            <div class="sb-layout">
+              <aside>
+                <h3 style="font-size:13px;margin-bottom:10px" class="muted">候选课程</h3>
+                <div class="card sb-course"><span class="sw" style="background:var(--primary)"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">CS101 数据结构</div><div class="muted" style="font-size:11px">周一/三/五 10:00</div></div><input type="checkbox" checked></div>
+                <div class="card sb-course"><span class="sw" style="background:var(--info)"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">CS150 计算机系统</div><div class="muted" style="font-size:11px">周二/四 14:00</div></div><input type="checkbox" checked></div>
+                <div class="card sb-course"><span class="sw" style="background:var(--node-milestone)"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">MATH201 概率论</div><div class="muted" style="font-size:11px">周一/三 08:00</div></div><input type="checkbox" checked></div>
+                <div class="card sb-course" style="border-color:color-mix(in oklch,var(--destructive) 40%,var(--border))"><span class="sw" style="background:var(--destructive)"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">CS210 操作系统</div><div style="font-size:11px;color:var(--destructive)">⚠ 与 CS101 冲突</div></div><input type="checkbox"></div>
+                <button class="btn outline sm" style="margin-top:8px;width:100%">＋ 添加候选</button>
+              </aside>
+              <div class="card" style="padding:16px">
+                <div class="cal-head"><div></div>
+                  <div class="dh"><div class="dow">周一</div></div><div class="dh"><div class="dow">周二</div></div><div class="dh"><div class="dow">周三</div></div><div class="dh"><div class="dow">周四</div></div><div class="dh"><div class="dow">周五</div></div>
+                </div>
+                <div class="cal-grid" style="grid-template-columns:40px repeat(5,1fr)">
+                  <div class="cal-gutter" style="height:560px"><div class="hr" style="top:0">8</div><div class="hr" style="top:56px">9</div><div class="hr" style="top:112px">10</div><div class="hr" style="top:168px">11</div><div class="hr" style="top:224px">12</div><div class="hr" style="top:280px">13</div><div class="hr" style="top:336px">14</div><div class="hr" style="top:392px">15</div><div class="hr" style="top:448px">16</div><div class="hr" style="top:504px">17</div></div>
+                  <div class="cal-col" style="height:560px"><div class="evt" style="--c:var(--node-milestone);top:0;height:90px"><div class="t">MATH201</div><div class="m">08:00</div></div><div class="evt" style="--c:var(--primary);top:112px;height:90px"><div class="t">CS101</div><div class="m">10:00</div></div></div>
+                  <div class="cal-col" style="height:560px"><div class="evt" style="--c:var(--info);top:336px;height:90px"><div class="t">CS150</div><div class="m">14:00</div></div></div>
+                  <div class="cal-col" style="height:560px"><div class="evt" style="--c:var(--node-milestone);top:0;height:90px"><div class="t">MATH201</div><div class="m">08:00</div></div><div class="evt" style="--c:var(--primary);top:112px;height:90px"><div class="t">CS101</div><div class="m">10:00</div></div></div>
+                  <div class="cal-col" style="height:560px"><div class="evt" style="--c:var(--info);top:336px;height:90px"><div class="t">CS150</div><div class="m">14:00</div></div></div>
+                  <div class="cal-col" style="height:560px"><div class="evt" style="--c:var(--primary);top:112px;height:90px"><div class="t">CS101</div><div class="m">10:00</div></div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;margin-top:14px"><span class="chip" style="background:color-mix(in oklch,var(--success) 12%,transparent);color:var(--success)">✓ 无冲突</span><span class="muted" style="font-size:12px">共 10 学分 · 周工作量约 29 小时</span><button class="btn primary sm" style="margin-left:auto">导出课表</button></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ 6. 教学评价 ============ -->
+          <section class="screen" id="screen-evaluate">
+            <div class="phead"><h1>教学评价</h1><div class="sub">评价分两层：学期中私有过程跟踪，学期末正式实名评价</div></div>
+            <div class="grid2">
+              <div class="card chartcard">
+                <div style="display:flex;align-items:center;gap:8px"><span class="chip sec">进行中 · 私有</span><div class="ct" style="margin:0">过程跟踪 · 第 5 周 check-in</div></div>
+                <p class="muted" style="font-size:13px;margin:8px 0 16px">仅自己可见，帮助积累素材，期末评价时可参考。</p>
+                <div class="rbar"><div class="rl"><span>当前体验</span><span class="rv muted">草稿</span></div><div class="rtrack"><div class="rfill" style="width:80%;background:var(--muted-foreground)"></div></div></div>
+                <textarea placeholder="这周的笔记 / 感受…" style="width:100%;height:88px;margin-top:10px;border:1px solid var(--border);border-radius:9px;padding:10px;font-family:inherit;font-size:13px;background:var(--background);color:var(--foreground);resize:none"></textarea>
+                <button class="btn outline sm" style="margin-top:10px">保存草稿</button>
+              </div>
+              <div class="card chartcard">
+                <div style="display:flex;align-items:center;gap:8px"><span class="chip" style="background:color-mix(in oklch,var(--success) 10%,transparent);color:var(--success)">学期末 · 实名</span><div class="ct" style="margin:0">最终评价</div></div>
+                <p class="muted" style="font-size:13px;margin:8px 0 16px">提交后不可修改，教师可回应不可删除。定量匿名展示、定性实名。</p>
+                <div class="rbar"><div class="rl"><span>教学质量</span><span class="rv">★★★★★</span></div></div>
+                <div class="rbar"><div class="rl"><span>难度</span><span class="rv">★★★★☆</span></div></div>
+                <div class="rbar"><div class="rl"><span>工作量</span><span class="rv">★★★★☆</span></div></div>
+                <textarea placeholder="写下对后来同学有参考价值的评价…" style="width:100%;height:88px;margin-top:4px;border:1px solid var(--border);border-radius:9px;padding:10px;font-family:inherit;font-size:13px;background:var(--background);color:var(--foreground);resize:none"></textarea>
+                <button class="btn primary sm" style="margin-top:10px">提交最终评价</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ 7. 组织与社团 ============ -->
+          <section class="screen" id="screen-orgs">
+            <div class="phead"><h1>组织与社团</h1><div class="sub">每个社团一个公开主页，发布活动与公告，不用加群才能了解</div></div>
+            <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin-bottom:26px">
+              <div class="card orgcard"><div style="display:flex;gap:12px;align-items:center"><div class="logo" style="background:var(--primary)">A</div><div><h4 style="font-size:15px">ACM 算法协会</h4><div class="muted" style="font-size:12px">214 名成员</div></div></div><p class="muted" style="font-size:13px;margin:12px 0 0">竞赛训练、周赛、讲座。</p></div>
+              <div class="card orgcard"><div style="display:flex;gap:12px;align-items:center"><div class="logo" style="background:var(--node-milestone)">摄</div><div><h4 style="font-size:15px">光影摄影社</h4><div class="muted" style="font-size:12px">98 名成员</div></div></div><p class="muted" style="font-size:13px;margin:12px 0 0">外拍、暗房、器材分享。</p></div>
+              <div class="card orgcard"><div style="display:flex;gap:12px;align-items:center"><div class="logo" style="background:var(--warning)">辩</div><div><h4 style="font-size:15px">辩论队</h4><div class="muted" style="font-size:12px">56 名成员</div></div></div><p class="muted" style="font-size:13px;margin:12px 0 0">校赛、新生杯、公开训练。</p></div>
+            </div>
+            <div class="card" style="padding:20px">
+              <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px"><div class="logo" style="background:var(--primary);width:40px;height:40px;border-radius:10px">A</div><div><h3 style="font-size:17px">ACM 算法协会</h3><div class="muted" style="font-size:12px">214 名成员 · 负责人 陈野</div></div><button class="btn primary sm" style="margin-left:auto">关注</button></div>
+              <h4 style="font-size:13px;margin-bottom:4px" class="muted">近期活动</h4>
+              <div class="act"><div class="when"><div class="d">12</div><div class="mo">10月</div></div><div><div style="font-weight:600;font-size:14px">周赛 #18 <span class="chip" style="background:color-mix(in oklch,var(--success) 10%,transparent);color:var(--success)">报名中</span></div><div class="muted" style="font-size:12px">19:00 · 工三机房 · 已报名 86 人</div></div></div>
+              <div class="act"><div class="when"><div class="d">18</div><div class="mo">10月</div></div><div><div style="font-weight:600;font-size:14px">动态规划专题讲座</div><div class="muted" style="font-size:12px">14:00 · 二教 301 · 主讲 周则明</div></div></div>
+              <div class="act" style="border-bottom:0"><div class="when"><div class="d">25</div><div class="mo">10月</div></div><div><div style="font-weight:600;font-size:14px">新生编程马拉松</div><div class="muted" style="font-size:12px">全天 · 创新中心</div></div></div>
+            </div>
+          </section>
+
+          <!-- ============ 8. 行政通知 ============ -->
+          <section class="screen" id="screen-notices">
+            <div class="phead"><h1>行政通知聚合</h1><div class="sub">学生搬运录入，按来源与类别结构化整理，不按时间流刷屏</div></div>
+            <div class="ban">ℹ️ 平台不设官方发布端。任何同学看到通知都可录入、标注来源，其他人补充纠错。</div>
+            <div class="ncat">
+              <h3>🎓 教务处 · <span class="muted" style="font-weight:400;font-size:13px">选课 / 考试</span></h3>
+              <div class="card nrow"><span class="dot" style="background:var(--node-exam)"></span><div style="flex:1"><div style="font-size:14px;font-weight:500">2026 秋期末考试安排公布</div><div class="muted" style="font-size:12px">录入 林晚 · 2 天前 · 已补充 3 次</div></div><span class="src">教务处通知</span></div>
+              <div class="card nrow"><span class="dot" style="background:var(--node-announcement)"></span><div style="flex:1"><div style="font-size:14px;font-weight:500">下学期预选课时间：11 月 10–14 日</div><div class="muted" style="font-size:12px">录入 苏青 · 5 天前</div></div><span class="src">教务系统</span></div>
+            </div>
+            <div class="ncat">
+              <h3>🏫 计算机学院 · <span class="muted" style="font-weight:400;font-size:13px">奖惩 / 活动</span></h3>
+              <div class="card nrow"><span class="dot" style="background:var(--node-milestone)"></span><div style="flex:1"><div style="font-size:14px;font-weight:500">2026 年度优秀学生奖学金评定通知</div><div class="muted" style="font-size:12px">录入 孟繁 · 1 天前</div></div><span class="src">辅导员 张老师</span></div>
+              <div class="card nrow"><span class="dot" style="background:var(--node-material)"></span><div style="flex:1"><div style="font-size:14px;font-weight:500">保研夏令营信息汇总（已归档）</div><div class="muted" style="font-size:12px">录入 陈野 · 1 个月前</div></div><span class="src">学院 QQ 群</span></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function go(id) {
+        document.querySelectorAll('.screen').forEach((s) => s.classList.remove('on'));
+        document.getElementById('screen-' + id).classList.add('on');
+        document.querySelectorAll('.nav a').forEach((a) => a.classList.toggle('on', a.dataset.screen === id));
+        document.querySelector('.content').scrollTo?.(0, 0);
+        window.scrollTo(0, 0);
+      }
+      document.querySelectorAll('.nav a').forEach((a) => a.addEventListener('click', () => go(a.dataset.screen)));
+    </script>
+  </body>
+</html>

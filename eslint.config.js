@@ -3,7 +3,8 @@ import globals from 'globals';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import prettier from 'eslint-plugin-prettier';
 
@@ -12,9 +13,11 @@ export default [
     ignores: [
       'node_modules',
       'dist',
+      '.claude/**',
       'src/components/ui/**',
       'eslint.config.js',
       'vite.config.ts',
+      'vitest.config.ts',
       'public/**',
     ],
   },
@@ -25,15 +28,18 @@ export default [
 
   // import
   {
-    plugins: { import: importPlugin },
+    plugins: { 'import-x': importPlugin },
     settings: {
-      'import/resolver': {
-        typescript: true,
-        node: true,
-      },
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
+          alwaysTryTypes: true,
+          noWarnOnMultipleProjects: true,
+          project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        }),
+      ],
     },
     rules: {
-      'import/order': [
+      'import-x/order': [
         'error',
         {
           groups: [

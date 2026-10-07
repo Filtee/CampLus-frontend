@@ -1,0 +1,11 @@
+node_modules
+dist
+bun.lock
+
+# Frozen product documentation (设计原则: source of truth, do not reformat)
+docs
+
+# Generated / vendored
+src/routeTree.gen.ts
+src/components/ui
+public/mockServiceWorker.js

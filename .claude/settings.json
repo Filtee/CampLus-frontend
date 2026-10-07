@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(bun install)",
+      "Bash(bun run:*)",
+      "Bash(bun dev)",
+      "Bash(npx @playwright/mcp@latest:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)"
+    ],
+    "ask": [
+      "Edit(src/components/ui/**)",
+      "Write(src/components/ui/**)",
+      "Edit(docs/**)",
+      "Write(docs/**)"
+    ],
+    "deny": [
+      "Edit(src/routeTree.gen.ts)",
+      "Write(src/routeTree.gen.ts)",
+      "Edit(public/mockServiceWorker.js)",
+      "Write(public/mockServiceWorker.js)",
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/format-file.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}

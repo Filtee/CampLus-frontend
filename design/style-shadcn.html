@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampLus 风格 A · shadcn 默认（中性）</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      /* ─── shadcn 默认（neutral base），无品牌色 ─── */
+      :root {
+        --radius: 0.625rem;
+        --background: oklch(1 0 0);
+        --foreground: oklch(0.145 0 0);
+        --card: oklch(1 0 0);
+        --card-foreground: oklch(0.145 0 0);
+        --primary: oklch(0.205 0 0);
+        --primary-foreground: oklch(0.985 0 0);
+        --secondary: oklch(0.97 0 0);
+        --secondary-foreground: oklch(0.205 0 0);
+        --muted: oklch(0.97 0 0);
+        --muted-foreground: oklch(0.556 0 0);
+        --accent: oklch(0.97 0 0);
+        --accent-foreground: oklch(0.205 0 0);
+        --destructive: oklch(0.577 0.245 27.325);
+        --border: oklch(0.922 0 0);
+        --sidebar: oklch(0.985 0 0);
+        /* shadcn 默认图表色板（用于课程/数据区分）*/
+        --chart-1: oklch(0.646 0.222 41.116);
+        --chart-2: oklch(0.6 0.118 184.704);
+        --chart-3: oklch(0.398 0.07 227.392);
+        --chart-4: oklch(0.828 0.189 84.429);
+        --chart-5: oklch(0.769 0.188 70.08);
+        --shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+        --shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+        --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
+      }
+      .dark {
+        --background: oklch(0.145 0 0);
+        --foreground: oklch(0.985 0 0);
+        --card: oklch(0.205 0 0);
+        --card-foreground: oklch(0.985 0 0);
+        --primary: oklch(0.922 0 0);
+        --primary-foreground: oklch(0.205 0 0);
+        --secondary: oklch(0.269 0 0);
+        --secondary-foreground: oklch(0.985 0 0);
+        --muted: oklch(0.269 0 0);
+        --muted-foreground: oklch(0.708 0 0);
+        --accent: oklch(0.269 0 0);
+        --accent-foreground: oklch(0.985 0 0);
+        --destructive: oklch(0.704 0.191 22.216);
+        --border: oklch(1 0 0 / 10%);
+        --sidebar: oklch(0.205 0 0);
+        --chart-1: oklch(0.488 0.243 264.376);
+        --chart-2: oklch(0.696 0.17 162.48);
+        --chart-3: oklch(0.769 0.188 70.08);
+        --chart-4: oklch(0.627 0.265 303.9);
+        --chart-5: oklch(0.645 0.246 16.439);
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif; background: var(--background); color: var(--foreground); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+      .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      h1,h2,h3,h4 { letter-spacing: -0.02em; margin: 0; }
+      .muted { color: var(--muted-foreground); }
+
+      .app { display: grid; grid-template-columns: 230px 1fr; min-height: 100vh; }
+      .sidebar { background: var(--sidebar); border-right: 1px solid var(--border); position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; padding: 18px 20px; }
+      .brand .mark { width: 28px; height: 28px; border-radius: 8px; background: var(--primary); color: var(--primary-foreground); display: grid; place-items: center; font-weight: 700; }
+      .nav { padding: 6px 12px; flex: 1; }
+      .nav a { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; font-size: 14px; color: var(--muted-foreground); text-decoration: none; font-weight: 500; }
+      .nav a.on { background: var(--accent); color: var(--accent-foreground); }
+      .nav .ic { width: 7px; height: 7px; border-radius: 2px; background: currentColor; opacity: 0.5; }
+      .foot { padding: 12px 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted-foreground); }
+
+      .topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 14px; height: 58px; padding: 0 26px; border-bottom: 1px solid var(--border); background: color-mix(in oklch, var(--background) 85%, transparent); backdrop-filter: blur(10px); }
+      .search { display: flex; align-items: center; gap: 8px; height: 34px; flex: 1; max-width: 380px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--muted); color: var(--muted-foreground); font-size: 13px; }
+      .toggle { cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--foreground); border-radius: 8px; padding: 6px 12px; font-size: 12px; font-family: inherit; }
+      .avatar { width: 30px; height: 30px; border-radius: 999px; background: var(--secondary); color: var(--secondary-foreground); display: grid; place-items: center; font-size: 11px; font-weight: 600; }
+      .content { padding: 26px; max-width: 1000px; margin: 0 auto; }
+      .stylebadge { display:inline-block; font-size:12px; font-weight:500; color: var(--muted-foreground); border:1px solid var(--border); border-radius:999px; padding:3px 11px; margin-bottom:10px; }
+
+      .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-xs); }
+      .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; border: 1px solid transparent; }
+      .btn.primary { background: var(--primary); color: var(--primary-foreground); }
+      .btn.outline { background: var(--card); border-color: var(--border); color: var(--foreground); }
+      .btn.sec { background: var(--secondary); color: var(--secondary-foreground); }
+      .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 8px; border: 1px solid var(--border); color: var(--muted-foreground); background: var(--card); }
+      .dot { width: 8px; height: 8px; border-radius: 999px; flex: none; display: inline-block; }
+      h2.sec { font-size: 13px; color: var(--muted-foreground); margin: 26px 0 12px; font-weight: 600; }
+
+      /* calendar */
+      .cal-top { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+      .seg { margin-left:auto; display:inline-flex; background: var(--muted); border-radius:8px; padding:3px; }
+      .seg button { border:0; background:transparent; font-family:inherit; font-size:13px; color: var(--muted-foreground); padding:5px 11px; border-radius:6px; cursor:pointer; }
+      .seg button.on { background: var(--card); color: var(--foreground); box-shadow: var(--shadow-xs); font-weight:500; }
+      .cal-head { display:grid; grid-template-columns:44px repeat(5,1fr); border-bottom:1px solid var(--border); }
+      .cal-head .dh { text-align:center; padding:4px 0 8px; }
+      .cal-head .dow { font-size:12px; color: var(--muted-foreground); }
+      .cal-head .dnum { font-size:14px; font-weight:600; margin-top:2px; display:inline-grid; place-items:center; width:26px; height:26px; border-radius:999px; }
+      .cal-head .today .dnum { background: var(--primary); color: var(--primary-foreground); }
+      .cal-grid { display:grid; grid-template-columns:44px repeat(5,1fr); margin-top:2px; }
+      .cal-gutter { position:relative; height:504px; }
+      .cal-gutter .hr { position:absolute; right:7px; font-size:10px; color: var(--muted-foreground); transform:translateY(-50%); }
+      .cal-col { position:relative; height:504px; border-left:1px solid var(--border); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 55px, var(--border) 55px, var(--border) 56px); }
+      .evt { position:absolute; left:4px; right:4px; border-radius:6px; padding:5px 7px; overflow:hidden; background: color-mix(in oklch, var(--c) 12%, var(--card)); border-left:3px solid var(--c); }
+      .evt .t { font-size:12px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .evt .m { font-size:10.5px; color: var(--muted-foreground); }
+      .nowline { position:absolute; left:0; right:0; height:2px; background: var(--destructive); z-index:3; }
+      .nowline::before { content:''; position:absolute; left:-4px; top:-3px; width:8px; height:8px; border-radius:999px; background: var(--destructive); }
+
+      .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(205px,1fr)); gap:14px; }
+      .ccard { padding:16px; }
+      .ccard .code { font-size:12px; font-weight:600; background: var(--secondary); color: var(--secondary-foreground); padding:2px 7px; border-radius:6px; }
+      .ccard h4 { margin:12px 0 2px; font-size:15px; }
+      .ccard .due { margin-top:14px; padding-top:12px; border-top:1px solid var(--border); display:flex; align-items:center; gap:8px; font-size:13px; }
+
+      /* timeline nodes — shadcn austere: outline chip + neutral rail + colored dot */
+      .tnode { position:relative; padding:14px 16px 14px 18px; overflow:hidden; margin-bottom:10px; }
+      .tnode .rail { position:absolute; inset:0 auto 0 0; width:3px; background: var(--border); }
+      .nchip { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500; padding:3px 9px; border-radius:8px; border:1px solid var(--border); color: var(--muted-foreground); }
+      .duepill { margin-left:auto; font-size:12px; font-weight:500; padding:3px 10px; border-radius:8px; background: var(--secondary); color: var(--secondary-foreground); }
+      .tnode h4 { margin:10px 0 3px; font-size:15px; }
+      .tnode p { margin:0; font-size:13.5px; color: var(--muted-foreground); }
+      .tnode .foot { margin-top:12px; display:flex; gap:14px; font-size:12px; color: var(--muted-foreground); }
+
+      /* chart */
+      .chartcard { padding:18px 20px; }
+      .chartcard .ct { font-size:14px; font-weight:600; } .chartcard .cs { font-size:12px; color: var(--muted-foreground); margin-bottom:16px; }
+      .hist { display:flex; align-items:flex-end; gap:8px; height:150px; border-bottom:1px solid var(--border); }
+      .hist .bar { flex:1; display:flex; align-items:flex-end; justify-content:center; height:100%; }
+      .hist .bar .fill { width:100%; max-width:30px; background: var(--primary); border-radius:4px 4px 0 0; }
+      .hist-x { display:flex; gap:8px; margin-top:6px; } .hist-x span { flex:1; text-align:center; font-size:11px; color: var(--muted-foreground); }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand"><span class="mark">C</span> CampLus</div>
+        <nav class="nav">
+          <a class="on"><span class="ic"></span>个人首页</a>
+          <a><span class="ic"></span>课程仪表盘</a>
+          <a><span class="ic"></span>课程搜索</a>
+          <a><span class="ic"></span>课程档案</a>
+          <a><span class="ic"></span>排课助手</a>
+          <a><span class="ic"></span>组织与社团</a>
+          <a><span class="ic"></span>行政通知</a>
+        </nav>
+        <div class="foot">风格 A · shadcn 默认</div>
+      </aside>
+
+      <div>
+        <header class="topbar">
+          <div class="search">🔍 搜索课程、组织、通知…</div>
+          <button class="toggle" onclick="document.documentElement.classList.toggle('dark')">浅 / 深</button>
+          <div class="avatar">林晚</div>
+        </header>
+
+        <div class="content">
+          <span class="stylebadge">风格 A · shadcn 默认（中性，无品牌色）</span>
+          <h1 style="font-size:24px;">下午好，林晚</h1>
+          <div class="muted" style="margin-top:4px;">本学期 4 门课 · 待跟进 3 项 · 第 5 教学周</div>
+
+          <!-- calendar -->
+          <div class="card" style="padding:18px 20px; margin-top:18px;">
+            <div class="cal-top"><h3 style="font-size:16px;">本周课表</h3><span class="muted" style="font-size:13px;">2026 年 10 月</span><span class="seg"><button>日</button><button class="on">周</button><button>月</button></span></div>
+            <div class="cal-head"><div></div>
+              <div class="dh"><div class="dow">周一</div><div class="dnum">10</div></div><div class="dh"><div class="dow">周二</div><div class="dnum">11</div></div><div class="dh today"><div class="dow">周三</div><div class="dnum">12</div></div><div class="dh"><div class="dow">周四</div><div class="dnum">13</div></div><div class="dh"><div class="dow">周五</div><div class="dnum">14</div></div>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-gutter"><div class="hr" style="top:0">8</div><div class="hr" style="top:56px">9</div><div class="hr" style="top:112px">10</div><div class="hr" style="top:168px">11</div><div class="hr" style="top:224px">12</div><div class="hr" style="top:280px">13</div><div class="hr" style="top:336px">14</div><div class="hr" style="top:392px">15</div><div class="hr" style="top:448px">16</div></div>
+              <div class="cal-col"><div class="evt" style="--c:var(--chart-2);top:0;height:90px"><div class="t">概率论</div><div class="m">08:00 理教201</div></div><div class="evt" style="--c:var(--chart-1);top:112px;height:90px"><div class="t">数据结构</div><div class="m">10:00 工三301</div></div></div>
+              <div class="cal-col"><div class="evt" style="--c:var(--chart-3);top:336px;height:90px"><div class="t">计算机系统</div><div class="m">14:00 二教410</div></div></div>
+              <div class="cal-col"><div class="evt" style="--c:var(--chart-2);top:0;height:90px"><div class="t">概率论</div><div class="m">08:00 理教201</div></div><div class="evt" style="--c:var(--chart-1);top:112px;height:90px"><div class="t">数据结构</div><div class="m">10:00 工三301</div></div><div class="nowline" style="top:138px"></div></div>
+              <div class="cal-col"><div class="evt" style="--c:var(--chart-3);top:336px;height:90px"><div class="t">计算机系统</div><div class="m">14:00 二教410</div></div><div class="evt" style="--c:var(--chart-5);top:448px;height:56px"><div class="t">数据库</div><div class="m">16:00</div></div></div>
+              <div class="cal-col"><div class="evt" style="--c:var(--chart-1);top:112px;height:90px"><div class="t">数据结构</div><div class="m">10:00 工三301</div></div></div>
+            </div>
+          </div>
+
+          <!-- cards -->
+          <h2 class="sec">我的课程</h2>
+          <div class="cards">
+            <div class="card ccard"><div style="display:flex;justify-content:space-between;align-items:center"><span class="code mono">CS101</span><span class="chip">专业必修</span></div><h4>数据结构与算法</h4><div class="muted" style="font-size:12px">周则明 · 2026 秋</div><div class="due"><span class="dot" style="background:var(--chart-5)"></span>作业 3 · 二叉树遍历<span style="margin-left:auto;font-weight:600">明天</span></div></div>
+            <div class="card ccard"><div style="display:flex;justify-content:space-between;align-items:center"><span class="code mono">CS150</span><span class="chip">专业必修</span></div><h4>计算机系统基础</h4><div class="muted" style="font-size:12px">何戟 · 2026 秋</div><div class="due"><span class="dot" style="background:var(--muted-foreground)"></span><span class="muted">本周 2 项更新</span></div></div>
+            <div class="card ccard"><div style="display:flex;justify-content:space-between;align-items:center"><span class="code mono">MATH201</span><span class="chip">通识必修</span></div><h4>概率论与数理统计</h4><div class="muted" style="font-size:12px">郑412 · 2026 秋</div><div class="due"><span class="dot" style="background:var(--chart-1)"></span>期中考试<span style="margin-left:auto" class="muted">10 天后</span></div></div>
+          </div>
+
+          <!-- timeline -->
+          <h2 class="sec">课程 Timeline（节点类型用中性徽章 + 小色点区分）</h2>
+          <div class="card tnode"><div class="rail"></div><div style="display:flex;align-items:center"><span class="nchip"><span class="dot" style="background:var(--chart-3)"></span>公告</span></div><h4>本周起上课教室调整至 工三 301</h4><p>因原教室设备检修，自第 5 周起全部课次移至工程三馆 301。</p><div class="foot"><span>学生整理</span><span>林晚 创建</span><span>💬 4</span></div></div>
+          <div class="card tnode"><div class="rail"></div><div style="display:flex;align-items:center"><span class="nchip"><span class="dot" style="background:var(--chart-5)"></span>作业</span><span class="duepill">截止 明天</span></div><h4>作业 3 · 二叉树遍历</h4><p>实现前/中/后序的递归与迭代版本，并比较其空间占用。</p><div class="foot"><span>课堂宣布</span><span>陈野 创建</span><span>💬 7</span></div></div>
+          <div class="card tnode"><div class="rail"></div><div style="display:flex;align-items:center"><span class="nchip"><span class="dot" style="background:var(--chart-1)"></span>考试</span><span class="duepill">10月20日</span></div><h4>期中考试</h4><p>范围：第 1–7 周。闭卷，允许一张 A4 手写公式纸。</p><div class="foot"><span>课堂宣布</span><span>周则明 创建</span><span>💬 9</span></div></div>
+
+          <!-- chart + controls -->
+          <h2 class="sec">成绩分布（单色，shadcn 克制图表风）</h2>
+          <div class="card chartcard">
+            <div class="ct">成绩分布</div><div class="cs">2025 秋 · 119 人 · 中位 A−</div>
+            <div class="hist">
+              <div class="bar"><div class="fill" style="height:85%"></div></div><div class="bar"><div class="fill" style="height:74%"></div></div><div class="bar"><div class="fill" style="height:64%"></div></div><div class="bar"><div class="fill" style="height:50%"></div></div><div class="bar"><div class="fill" style="height:36%"></div></div><div class="bar"><div class="fill" style="height:22%"></div></div><div class="bar"><div class="fill" style="height:15%"></div></div><div class="bar"><div class="fill" style="height:8%"></div></div><div class="bar"><div class="fill" style="height:4%"></div></div>
+            </div>
+            <div class="hist-x"><span>A</span><span>A−</span><span>B+</span><span>B</span><span>B−</span><span>C+</span><span>C</span><span>D</span><span>F</span></div>
+          </div>
+
+          <h2 class="sec">控件</h2>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="btn primary">主按钮</button><button class="btn outline">次按钮</button><button class="btn sec">三级</button>
+            <span class="chip">专业必修</span><span class="chip"><span class="dot" style="background:var(--chart-2)"></span>资料</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
